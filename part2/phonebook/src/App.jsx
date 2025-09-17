@@ -6,6 +6,8 @@ const App = () => {
   ]) 
 
   const [newInfo, setNewInfo] = useState({})
+  const [filter, setfilter] = useState("")
+
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -25,11 +27,16 @@ const App = () => {
       [field]: e.target.value
     })
   }
+
+  const handleFilterChange = e => {
+    setfilter(e.target.value)
+  }
   
   return (
     <div>
-      <div>debug: {newInfo.name}</div>
       <h2>Phonebook</h2>
+      <div>filter shown with <input onChange={handleFilterChange}></input></div>
+      <h2>add a new</h2>
       <form onSubmit={handleSubmit}>
         <div>
           name: <input onChange={makeChangeHandler("name")}/>
@@ -42,7 +49,9 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
+      {persons
+        .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()) )
+        .map(person => <div key={person.name}>{person.name} {person.number}</div>)}
     </div>
   )
 }
