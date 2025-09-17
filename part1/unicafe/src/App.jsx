@@ -17,17 +17,19 @@ const Statistics = ({good, bad, neutral}) => {
   return (
     <div>
       <h1>statistics</h1>
-      <StatisticLine label="good" value={good}></StatisticLine>
-      <StatisticLine label="neutral" value={neutral}></StatisticLine>
-      <StatisticLine label="bad" value={bad}></StatisticLine>
-      <StatisticLine label="all" value={total}></StatisticLine>
-      <StatisticLine label="average" value={(good - bad) / total}></StatisticLine>
-      <StatisticLine label="positive" value={good / total * 100 + "%"}></StatisticLine>
+      <table>
+        <StatisticLine label="good" value={good}></StatisticLine>
+        <StatisticLine label="neutral" value={neutral}></StatisticLine>
+        <StatisticLine label="bad" value={bad}></StatisticLine>
+        <StatisticLine label="all" value={total}></StatisticLine>
+        <StatisticLine label="average" value={(good - bad) / total}></StatisticLine>
+        <StatisticLine label="positive" value={good / total * 100 + "%"}></StatisticLine>
+      </table>
     </div>
   )
 }
 
-const StatisticLine = ({label, value}) => <div>{label} {value}</div>
+const StatisticLine = ({label, value}) => <tr><td>{label}</td><td>{value}</td></tr>
 
 const App = () => {
   // save clicks of each button to its own state
