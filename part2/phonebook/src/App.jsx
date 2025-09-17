@@ -1,17 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState, } from 'react'
+import axios from 'axios'
 
 import Phonebook from './components/Phonebook'
 import Form from './components/Form'
 import Search from './components/Search'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567'}
-  ]) 
+  const [persons, setPersons] = useState([]) 
 
   const [newInfo, setNewInfo] = useState({})
   const [filter, setfilter] = useState("")
-
+  
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -35,6 +34,14 @@ const App = () => {
   const handleFilterChange = e => {
     setfilter(e.target.value)
   }
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, []);
   
   return (
     <div>
