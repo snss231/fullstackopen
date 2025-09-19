@@ -18,10 +18,17 @@ const App = () => {
       alert(`${newInfo.name} is already added to phonebook`)
       return;
     }
-    setPersons(persons.concat({
+    axios.post('http://localhost:3001/persons', {
       name: newInfo.name,
       number: newInfo.number
-    }))
+    })
+    .then(response => {
+      setPersons(persons.concat({
+        name: response.data.name,
+        number: response.data.number,
+        id: response.data.id
+      }))
+    })
   }
 
   const makeChangeHandler = field => e => {
