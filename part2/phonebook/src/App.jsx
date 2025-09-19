@@ -15,7 +15,7 @@ const App = () => {
   const handleSubmit = e => {
     e.preventDefault();
     if (persons.some(person => person.name === newInfo.name)) {
-      alert(`${newInfo.name} is already added to phonebook`)
+      alert(`${newInfo.name} is already added to phonebook, replace the old number with a new one?`)
       return;
     }
 
@@ -29,7 +29,9 @@ const App = () => {
   }
 
   const handleDelete = person => {
-    alert(`Are you sure you want to delete "${person.name} ${person.number}"?`)
+    if (!confirm(`Are you sure you want to delete "${person.name} ${person.number}"?`)) {
+      return
+    }
     phonebookService
       .deleteById(person.id)
       .then(deletedPerson => setPersons(persons.filter(person => person.id !== deletedPerson.id)))
