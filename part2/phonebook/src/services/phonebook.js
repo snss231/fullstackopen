@@ -17,5 +17,10 @@ const deleteById = id =>
     .then(response => response.data)
     .catch(error => alert(error))
  
+const update = (id, newObject) =>
+  axios
+    .put(`${baseUrl}/${id}`, newObject)
+    .then(response => response.data)
+    .catch(error => alert(error))
 
-export default { getAll, create, deleteById }
+export default { getAll, create, deleteById, update }

@@ -14,18 +14,22 @@ const App = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (persons.some(person => person.name === newInfo.name)) {
-      alert(`${newInfo.name} is already added to phonebook, replace the old number with a new one?`)
-      return;
+    var existing = persons.find(person => person.name === newInfo.name);
+    if (!existing) {
+      phonebookService
+        .create(newInfo)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
+        })
+      return
     }
 
-    phonebookService.create({
-      name: newInfo.name,
-      number: newInfo.number
-    })
-    .then(newPerson => {
-      setPersons(persons.concat(newPerson))
-    })
+    if (confirm(`${newInfo.name} is already added to phonebook, replace the old number with a new one?`)) {
+      phonebookService.update(existing.id, newInfo)
+        .then(newPerson => 
+          setPersons(persons.map(person => person.id === existing.id 
+            ? newPerson : person)))
+    }
   }
 
   const handleDelete = person => {
