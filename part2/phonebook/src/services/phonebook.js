@@ -11,4 +11,11 @@ const create = newObject =>
     .post(baseUrl, newObject)
     .then(response => response.data)
 
-export default { getAll, create }
+const deleteById = id => 
+   axios
+    .delete(`${baseUrl}/${id}`)
+    .then(response => response.data)
+    .catch(error => alert(error))
+ 
+
+export default { getAll, create, deleteById }

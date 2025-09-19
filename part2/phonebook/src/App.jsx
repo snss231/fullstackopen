@@ -1,5 +1,4 @@
 import { useEffect, useState, } from 'react'
-import axios from 'axios'
 
 import Phonebook from './components/Phonebook'
 import Form from './components/Form'
@@ -29,6 +28,13 @@ const App = () => {
     })
   }
 
+  const handleDelete = person => {
+    alert(`Are you sure you want to delete "${person.name} ${person.number}"?`)
+    phonebookService
+      .deleteById(person.id)
+      .then(deletedPerson => setPersons(persons.filter(person => person.id !== deletedPerson.id)))
+  }
+
   const makeChangeHandler = field => e => {
     setNewInfo({
       ...newInfo,
@@ -52,7 +58,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Search handleFilterChange={handleFilterChange}></Search>
       <Form handleSubmit={handleSubmit} makeChangeHandler={makeChangeHandler}></Form>
-      <Phonebook persons={persons} filter={filter}></Phonebook>
+      <Phonebook persons={persons} filter={filter} handleDelete={handleDelete}></Phonebook>
     </div>
   )
 }
