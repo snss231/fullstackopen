@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import countryService from './services/countries'
+import weatherService from './services/openweather'
 import CountryDetails from './components/CountryDetails'
 
 function App() {
@@ -14,7 +15,6 @@ function App() {
       .getAllCountries()
       .then(countries => {
         setAllCountries(countries.map(e => e.name.common))
-        
       })
   }, [])
 
@@ -38,7 +38,20 @@ function App() {
       setMatchedCountryName(filtered[0])
       countryService
         .getCountryByName(filtered[0])
-        .then(country => setMatchedCountry(country));
+        .then(country =>
+          weatherService
+          .getWeather(country.capitalInfo.latlng[0], country.capitalInfo.latlng[1])
+          .then(weather =>
+            setMatchedCountry({
+              ...country,
+              weather: weather
+            })
+          )
+          .catch(err => {
+            console.log(err)
+            setMatchedCountry(country)
+          })
+        )
     } else {
       setMatchedCountryName(null)
       setMatchedCountry(null)
@@ -47,10 +60,23 @@ function App() {
 
   const handleShow = country => {
     setMatchedCountryName(country)
-      countryService
-        .getCountryByName(country)
-        .then(country => setMatchedCountry(country));
-  }
+    countryService
+      .getCountryByName(country)
+      .then(country =>
+        weatherService
+        .getWeather(country.capitalInfo.latlng[0], country.capitalInfo.latlng[1])
+        .then(weather =>
+          setMatchedCountry({
+            ...country,
+            weather: weather
+          })
+        )
+        .catch(err => {
+          console.log(err)
+          setMatchedCountry(country)
+        })
+      )
+  };
 
   return (
     <>
