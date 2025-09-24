@@ -15,7 +15,6 @@ const deleteById = id =>
    axios
     .delete(`${baseUrl}/${id}`)
     .then(response => response.data)
-    .catch(error => alert(error))
  
 const update = (id, newObject) =>
   axios
