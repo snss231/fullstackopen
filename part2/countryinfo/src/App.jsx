@@ -7,6 +7,7 @@ function App() {
   const [filteredCountries, setFilteredCountries] = useState([])
   const [allCountries, setAllCountries] = useState(null)
   const [matchedCountry, setMatchedCountry] = useState(null)
+  const [matchedCountryName, setMatchedCountryName] = useState(null)
 
   useEffect(() => {
     countryService
@@ -34,10 +35,21 @@ function App() {
     var filtered = allCountries.filter(country => country.toLowerCase().includes(currFilter.toLowerCase()))
     setFilteredCountries(filtered)
     if (filtered.length === 1) {
+      setMatchedCountryName(filtered[0])
       countryService
         .getCountryByName(filtered[0])
         .then(country => setMatchedCountry(country));
+    } else {
+      setMatchedCountryName(null)
+      setMatchedCountry(null)
     }
+  }
+
+  const handleShow = country => {
+    setMatchedCountryName(country)
+      countryService
+        .getCountryByName(country)
+        .then(country => setMatchedCountry(country));
   }
 
   return (
@@ -45,17 +57,17 @@ function App() {
       <div>
         find countries: <input onChange={handleFilter}></input>
         {
-          !allCountries 
+          matchedCountryName
+            ? (!matchedCountry 
+              ? <div>Loading details for {matchedCountryName}...</div>
+              : <CountryDetails country={matchedCountry}></CountryDetails>)
+            : !allCountries 
             ? <div>Loading...</div>
             : !filter.length
             ? <div></div>
             : filteredCountries.length > 10 
             ? <div>Too many matches, specify another filter</div>
-            : filteredCountries.length != 1 
-            ? filteredCountries.map(country => <div key={country}>{country}</div>)
-            : !matchedCountry 
-            ? <div>Loading details for {filteredCountries[0]}...</div>
-            : <CountryDetails country={matchedCountry}></CountryDetails>
+            :  filteredCountries.map(country => <div key={country}>{country} <button onClick={() => handleShow(country)}>Show</button></div>)
         }
       </div>
     </>
