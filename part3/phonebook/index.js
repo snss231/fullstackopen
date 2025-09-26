@@ -5,7 +5,8 @@ const app = express()
 
 app.use(express.json())
 
-app.use(morgan('tiny'))
+morgan.token('data', (req, res) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 let persons = [
     { 
@@ -52,17 +53,19 @@ app.post('/api/persons', (req, res) => {
 
     if (!body.name) {
         res.status(400).json({ error: "missing name"})
+        return;
     }
 
     if (!body.number) {
         res.status(400).json({ error: "missing number"})
+        return;
     }
 
     if (persons.find(p => p.name === body.name)) {
         res.status(400).json({ error: "name must be unique"})
+        return;
     }
     const person = {...body, id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}
-    console.log(person)
     persons = [...persons, person]
     res.json(person)
 })
