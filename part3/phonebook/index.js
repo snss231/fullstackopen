@@ -34,6 +34,13 @@ app.get('/api/persons/:id', (req, res) => {
     return person ? res.json(person) : res.status(404).end()
 })
 
+app.delete('/api/persons/:id', (req, res) => {
+    const { id } = req.params
+    const person = persons.find(p => p.id == id)
+    persons = persons.filter(p => p.id !== id)
+    return res.status(person ? 204 : 404).end()
+})
+
 
 app.get('/info', (req, res) => {
     res.send(`<div>Phonebook has info for ${persons.length} people
