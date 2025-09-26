@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     { 
       "id": "1",
@@ -41,6 +43,12 @@ app.delete('/api/persons/:id', (req, res) => {
     return res.status(person ? 204 : 404).end()
 })
 
+app.post('/api/persons', (req, res) => {
+    const person = {...req.body, id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}
+    console.log(person)
+    persons = [...persons, person]
+    res.json(person)
+})
 
 app.get('/info', (req, res) => {
     res.send(`<div>Phonebook has info for ${persons.length} people
