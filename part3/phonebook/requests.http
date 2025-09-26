@@ -8,3 +8,38 @@ Content-Type: application/json
     "name": "Harry Potter",
     "number": 911
 }
+
+###
+POST localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Harry Potter",
+    "number": 911
+}
+
+###
+POST localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Harry Potter"
+}
+
+###
+POST localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "number": 911
+}
+
+###
+POST localhost:3001/api/persons
+Content-Type: application/json
+
+{}
+
+###
+POST localhost:3001/api/persons
+Content-Type: application/json

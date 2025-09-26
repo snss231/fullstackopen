@@ -44,7 +44,20 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-    const person = {...req.body, id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}
+    const { body } = req;
+
+    if (!body.name) {
+        res.status(400).json({ error: "missing name"})
+    }
+
+    if (!body.number) {
+        res.status(400).json({ error: "missing number"})
+    }
+
+    if (persons.find(p => p.name === body.name)) {
+        res.status(400).json({ error: "name must be unique"})
+    }
+    const person = {...body, id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}
     console.log(person)
     persons = [...persons, person]
     res.json(person)
