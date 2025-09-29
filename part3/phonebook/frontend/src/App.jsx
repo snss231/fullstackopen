@@ -49,7 +49,9 @@ const App = () => {
     }
     phonebookService
       .deleteById(person.id)
-      .then(deletedPerson => setPersons(persons.filter(person => person.id !== deletedPerson.id)))
+      .then(deletedPerson => {
+        setPersons(persons.filter(person => person.id !== deletedPerson.id))
+      })
       .catch(error => {
         setNotification({
           message: `Information of ${person.name} has already been removed from server`,
