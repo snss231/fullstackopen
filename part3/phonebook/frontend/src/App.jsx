@@ -26,6 +26,12 @@ const App = () => {
             setNotification({})
           }, 5000)
         })
+        .catch(error => {
+          setNotification({message: `Person validation failed: ${error.response.data.error}`, isError: true})
+          setTimeout(() => {
+            setNotification({})
+          }, 5000)
+        })
       return
     }
 
@@ -39,7 +45,12 @@ const App = () => {
             setNotification({})
           }, 5000)
         })
-          
+        .catch(error => {
+          setNotification({message: `Person validation failed: ${error.response.data.error}`, isError: true})
+          setTimeout(() => {
+            setNotification({})
+          }, 5000)
+        })
     }
   }
 
