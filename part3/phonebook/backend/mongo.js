@@ -13,15 +13,15 @@ mongoose.set('strictQuery', false)
 
 mongoose.connect(url)
 
-const entrySchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String,
 })
 
-const Entry = mongoose.model('Entry', entrySchema)
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length === 3) {
-  Entry
+  Person
     .find({})
     .then(entries => {
       console.log('phonebook:')
@@ -34,11 +34,11 @@ if (process.argv.length === 3) {
 if (process.argv.length === 5) {
   const name = process.argv[3]
   const number = process.argv[4]
-  const entry = new Entry({
+  const person = new Person({
     name: name,
     number: number
   })
-  entry.save().then(result => {
+  person.save().then(result => {
     console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
   })

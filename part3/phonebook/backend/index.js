@@ -1,7 +1,7 @@
 const express = require('express')
 var morgan = require('morgan')
 const cors = require('cors')
-const Entry = require('./models/entry')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -13,7 +13,7 @@ morgan.token('data', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 app.get('/api/persons', (req, res) => {
-  Entry.find({})
+  Person.find({})
     .then(persons => {
       res.json(persons)
     })
@@ -21,7 +21,7 @@ app.get('/api/persons', (req, res) => {
 
 app.get('/api/persons/:id', (req, res, next) => {
   const { id } = req.params
-  Entry.findById(id)
+  Person.findById(id)
     .then(person => {
        person ? res.json(person) : res.status(404).end()
     })
@@ -30,7 +30,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   const { id } = req.params
-  Entry.findByIdAndDelete(id) 
+  Person.findByIdAndDelete(id) 
     .then(person => {
       person ? res.json(person) : res.status(404).end()
     })
@@ -50,11 +50,11 @@ app.post('/api/persons', (req, res) => {
     return;
   }
 
-  if (Entry.find({ name: body.name }).length) {
+  if (Person.find({ name: body.name }).length) {
     res.status(400).json({ error: "name must be unique" })
     return;
   }
-  const person = new Entry(body)
+  const person = new Person(body)
   person.save().then(result => {
     res.json(person)
   })
@@ -74,7 +74,7 @@ app.put('/api/persons/:id', (req, res) => {
     return;
   }
 
-  Entry.findByIdAndUpdate(id, body)
+  Person.findByIdAndUpdate(id, body)
     .then(person => {
       res.json(person)
     })
@@ -82,7 +82,7 @@ app.put('/api/persons/:id', (req, res) => {
 
 
 app.get('/info', (req, res) => {
-  Entry.countDocuments({}).then(
+  Person.countDocuments({}).then(
     count => {
       res.send(`<div>Phonebook has info for ${count} people
 <br/>
