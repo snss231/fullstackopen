@@ -9,10 +9,10 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
 
-morgan.token('data', (req, res) => JSON.stringify(req.body))
+morgan.token('data', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (_, res) => {
   Person.find({})
     .then(persons => {
       res.json(persons)
@@ -23,14 +23,14 @@ app.get('/api/persons/:id', (req, res, next) => {
   const { id } = req.params
   Person.findById(id)
     .then(person => {
-       person ? res.json(person) : res.status(404).end()
+      person ? res.json(person) : res.status(404).end()
     })
     .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
   const { id } = req.params
-  Person.findByIdAndDelete(id) 
+  Person.findByIdAndDelete(id)
     .then(person => {
       person ? res.json(person) : res.status(404).end()
     })
@@ -38,44 +38,45 @@ app.delete('/api/persons/:id', (req, res, next) => {
 })
 
 app.post('/api/persons', (req, res, next) => {
-  const { body } = req;
+  const { body } = req
 
   if (!body.name) {
-    res.status(400).json({ error: "missing name" })
-    return;
+    res.status(400).json({ error: 'missing name' })
+    return
   }
 
   if (!body.number) {
-    res.status(400).json({ error: "missing number" })
-    return;
+    res.status(400).json({ error: 'missing number' })
+    return
   }
 
   if (Person.find({ name: body.name }).length) {
-    res.status(400).json({ error: "name must be unique" })
-    return;
+    res.status(400).json({ error: 'name must be unique' })
+    return
   }
   const person = new Person(body)
-  person.save().then(result => {
-    res.json(person)
-  })
-  .catch(error => next(error))
+  person.save()
+    .then(() => {
+      res.json(person)
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  const { body } = req;
-  const { id } = req.params;
+  const { body } = req
+  const { id } = req.params
 
   if (!body.name) {
-    res.status(400).json({ error: "missing name" })
-    return;
+    res.status(400).json({ error: 'missing name' })
+    return
   }
 
   if (!body.number) {
-    res.status(400).json({ error: "missing number" })
-    return;
+    res.status(400).json({ error: 'missing number' })
+    return
   }
 
-  Person.findByIdAndUpdate(id, body, { runValidators: true})
+  Person.findByIdAndUpdate(id, body, { runValidators: true })
     .then(person => {
       res.json(person)
     })
@@ -89,7 +90,7 @@ app.get('/info', (req, res) => {
       res.send(`<div>Phonebook has info for ${count} people
 <br/>
 <br/>
-${new Date()}</div>`);
+${new Date()}</div>`)
     }
   )
 })
@@ -99,7 +100,7 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  }
 
   if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
