@@ -64,3 +64,12 @@ Content-Type: application/json
     "name": "Aa",
     "number": 911
 }
+
+###
+PUT http://localhost:3001/api/persons/68e0eafeb561c9200a8f7fc1
+Content-Type: application/json
+
+{
+    "name": "abc",
+    "number": 911
+}
