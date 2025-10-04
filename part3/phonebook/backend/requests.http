@@ -1,10 +1,7 @@
-DELETE localhost:3001/api/persons/4
+GET http://localhost:3001/api/persons
 
 ###
-DELETE localhost:3001/api/persons/4
-
-###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
@@ -13,7 +10,7 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
@@ -22,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
@@ -30,7 +27,7 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
@@ -38,11 +35,18 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {}
 
 ###
-POST localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
+
+###
+DELETE http://localhost:3001/api/persons/68e0e0f5451ce594a8de4541
+
+###
+DELETE http://localhost:3001/api/persons/4
+
