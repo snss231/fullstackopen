@@ -3,15 +3,7 @@ const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
 const { read } = require('node:fs')
 
-test('dummy returns one', () => {
-  const blogs = []
-
-  const result = listHelper.dummy(blogs)
-  assert.strictEqual(result, 1)
-})
-
-describe('total likes', () => {
-  const listWithOneBlog = [
+const listWithOneBlog = [
     {
       _id: '5a422aa71b54a676234d17f8',
       title: 'Go To Statement Considered Harmful',
@@ -72,7 +64,14 @@ describe('total likes', () => {
       __v: 0
     }
   ]
+test('dummy returns one', () => {
+  const blogs = []
 
+  const result = listHelper.dummy(blogs)
+  assert.strictEqual(result, 1)
+})
+
+describe('total likes', () => {
   test('when list has only one blog, equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
     assert.strictEqual(result, 5)
@@ -86,5 +85,23 @@ describe('total likes', () => {
   test('returns 0 for empty list', () => {
     const result = listHelper.totalLikes([])
     assert.strictEqual(result, 0)
+  })
+})
+
+describe('favourite blog', () => {
+  test('when list has only one blog, returns it', () => {
+    const result = listHelper.favouriteBlog(listWithOneBlog)
+    assert.deepStrictEqual(result, listWithOneBlog[0])
+  })
+
+  test('sums correctly for list with multiple blogs', () => {
+    const expected = readyMadeList.find(blog => blog._id === "5a422b3a1b54a676234d17f9")
+    const result = listHelper.favouriteBlog(readyMadeList)
+    assert.deepStrictEqual(result, expected)
+  })
+  
+  test('returns null for empty list', () => {
+    const result = listHelper.favouriteBlog([])
+    assert.deepStrictEqual(result, null)
   })
 })
