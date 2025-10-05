@@ -1,4 +1,4 @@
-const { groupBy, reduce } = require('lodash')
+const { groupBy, reduce, sum } = require('lodash')
 
 const dummy = () => 1
 
@@ -15,10 +15,18 @@ const mostBlogs = blogs =>
         { name: null, blogs: 0}
     ).name
 
+const mostLikes = blogs => 
+    reduce(
+        groupBy(blogs, blog => blog.author),
+        (res, value, key) => res.likes < totalLikes(value) ? { name: key, likes: totalLikes(value) } : res,
+        { name: null, likes: 0}
+    ).name
+
 
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
   mostBlogs,
+  mostLikes,
 }
