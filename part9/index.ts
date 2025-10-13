@@ -5,7 +5,7 @@ import { calculateBmi } from './bmiCalculator';
 const app = express();
 
 app.get('/hello', (_, res) => {
-    res.send("Hello Full Stack!")
+    res.send("Hello Full Stack!");
 });
 
 app.get('/bmi', (req, res) => {
@@ -23,7 +23,7 @@ app.get('/bmi', (req, res) => {
         weight: weight,
         height: height,
         bmi: calculateBmi(height, weight)
-    })
+    });
 });
 
 const PORT = 3003;

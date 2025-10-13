@@ -23,8 +23,8 @@ const parseArguments = (args: string[]): ExerciseCalculatorInput => {
   return {
     dailyExerciseHours: args.slice(3).map(arg => Number(arg)),
     targetHours: Number(args[2])
-  }
-}
+  };
+};
 
 const calculateExercises = (dailyExerciseHours: number[], targetHours: number) => {
     const totalExerciseHours = dailyExerciseHours.reduce((prev, curr) => curr + prev);
@@ -37,7 +37,7 @@ const calculateExercises = (dailyExerciseHours: number[], targetHours: number) =
         1: '< 50% of target reached',
         2: '< 100% but >= 50% of target reached',
         3: 'target reached'
-    }
+    };
 
     const result: Result = {
         days: dailyExerciseHours.length,
@@ -50,17 +50,17 @@ const calculateExercises = (dailyExerciseHours: number[], targetHours: number) =
     };
 
     console.log(result);
-}
+};
 
 try {
   const { dailyExerciseHours, targetHours } = parseArguments(process.argv);
   calculateExercises(dailyExerciseHours, targetHours);
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
   console.log(errorMessage);
 }
 
-export default {}
+export default {};
