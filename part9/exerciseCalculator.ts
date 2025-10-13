@@ -8,13 +8,30 @@ interface Result {
     explanation: string
 }
 
+interface ExerciseCalculatorInput {
+    dailyExerciseHours: number[],
+    targetHours: number
+}
 
-const calculateExercises = (dailyExerciseHours: number[], targetAmount: number) => {
+const parseArguments = (args: string[]): ExerciseCalculatorInput => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  if (args.slice(2).find(arg => isNaN(Number(arg)))) {
+    throw new Error('Provided values were not numbers!');
+  }
+
+  return {
+    dailyExerciseHours: args.slice(3).map(arg => Number(arg)),
+    targetHours: Number(args[2])
+  }
+}
+
+const calculateExercises = (dailyExerciseHours: number[], targetHours: number) => {
     const totalExerciseHours = dailyExerciseHours.reduce((prev, curr) => curr + prev);
 
     const average = totalExerciseHours / dailyExerciseHours.length;
 
-    const rating = average >= targetAmount ? 3 : totalExerciseHours >= targetAmount / 2 ? 2 : 1;
+    const rating = average >= targetHours ? 3 : totalExerciseHours >= targetHours / 2 ? 2 : 1;
 
     const ratingExplanations = {
         1: '< 50% of target reached',
@@ -22,20 +39,22 @@ const calculateExercises = (dailyExerciseHours: number[], targetAmount: number) 
         3: 'target reached'
     }
 
-    console.log({
+    const result: Result = {
         days: dailyExerciseHours.length,
         trainingDays: dailyExerciseHours.filter(h => h !== 0).length,
-        target: targetAmount,
+        target: targetHours,
         average: totalExerciseHours / dailyExerciseHours.length,
-        isTargetReached: average >= targetAmount,
+        isTargetReached: average >= targetHours,
         rating: rating,
         explanation: ratingExplanations[rating]
-    });
+    };
+
+    console.log(result);
 }
 
 try {
-  //const { height, weight } = parseArguments(process.argv);
-  calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2);
+  const { dailyExerciseHours, targetHours } = parseArguments(process.argv);
+  calculateExercises(dailyExerciseHours, targetHours);
 } catch (error: unknown) {
   let errorMessage = 'Something bad happened.'
   if (error instanceof Error) {
@@ -43,3 +62,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default {}
