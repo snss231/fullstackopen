@@ -48,8 +48,8 @@ const calculateExercises = (dailyExerciseHours: number[], targetHours: number) =
         rating: rating,
         explanation: ratingExplanations[rating]
     };
-
     console.log(result);
+    return result;
 };
 
 try {
@@ -63,4 +63,4 @@ try {
   console.log(errorMessage);
 }
 
-export default {};
+export { calculateExercises };
