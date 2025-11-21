@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 const Blog = require('../models/blog')
+const { log } = require('node:console')
 
 let api
 
@@ -84,11 +85,38 @@ test('get blogs returns correct amount of blog posts', async () => {
   assert.strictEqual(res.body.length, readyMadeList.length)
 })
 
-test.only('unique identifier is id', async () => {
+test('unique identifier is id', async () => {
   const res = await api
     .get('/api/blogs')
 
   assert.doesNotThrow(() => res.body[0].id)
+})
+
+test.only('post blogs correctly creates blog', async () => {
+  const initialCount = await Blog.countDocuments()
+
+  const req = {
+        title: "Test blog",
+        author: "Testy",
+        url: "https://test-blog.com/",
+        likes: 999,
+  };
+
+  const res = await api
+    .post('/api/blogs')
+    .send(req)
+    .expect(201)
+
+  const created = await Blog.findById(res.body.id)
+
+  assert.equal(await Blog.countDocuments(), initialCount + 1)
+
+  assert.deepStrictEqual({
+    title: created.title,
+    author: created.author,
+    url: created.url,
+    likes: created.likes
+  }, req)
 })
 
 after(async () => {
