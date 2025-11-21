@@ -137,8 +137,7 @@ test('likes defaults to 0 if missing from request', async () => {
   assert.equal(created.likes, 0)
 })
 
-test.only('post blogs returns 400 if url or title missing', async () => {
-
+test('post blogs returns 400 if url or title missing', async () => {
   await api
     .post('/api/blogs')
     .send({
@@ -161,6 +160,20 @@ test.only('post blogs returns 400 if url or title missing', async () => {
       url: "https://url.com"
     })
     .expect(400)
+})
+
+test.only('delete blog succeeds for existing blog', async () => {
+  const blog = await Blog.findOne({})
+
+  assert.notStrictEqual(await Blog.findById(blog.id), null)
+  
+  const res = await api
+    .delete(`/api/blogs/${blog.id}`)
+    .expect(200)
+  console.log('a')
+  assert.strictEqual(blog.id, res.body.id)
+
+  assert.strictEqual(await Blog.findById(blog.id), null)
 })
 
 after(async () => {
