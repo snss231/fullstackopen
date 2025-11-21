@@ -76,13 +76,19 @@ beforeEach(async () => {
   await Blog.insertMany(readyMadeList)
 })
 
-test.only('get blogs returns correct amount of blog posts', async () => {
+test('get blogs returns correct amount of blog posts', async () => {
   const res = await api
     .get('/api/blogs')
     .expect('Content-Type', /application\/json/)
-  console.log(res.status)
 
   assert.strictEqual(res.body.length, readyMadeList.length)
+})
+
+test.only('unique identifier is id', async () => {
+  const res = await api
+    .get('/api/blogs')
+
+  assert.doesNotThrow(() => res.body[0].id)
 })
 
 after(async () => {
