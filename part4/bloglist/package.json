@@ -15,5 +15,9 @@
     "express": "^5.1.0",
     "lodash": "^4.17.21",
     "mongoose": "^8.19.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.3.0",
+    "supertest": "^7.1.4"
   }
 }
