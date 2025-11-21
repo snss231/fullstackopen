@@ -119,7 +119,7 @@ test('post blogs correctly creates blog', async () => {
   }, req)
 })
 
-test.only('likes defaults to 0 if missing from request', async () => {
+test('likes defaults to 0 if missing from request', async () => {
   const req = {
     title: "Likeless blog",
     author: "Loser",
@@ -135,6 +135,32 @@ test.only('likes defaults to 0 if missing from request', async () => {
   const created = await Blog.findById(res.body.id)
 
   assert.equal(created.likes, 0)
+})
+
+test.only('post blogs returns 400 if url or title missing', async () => {
+
+  await api
+    .post('/api/blogs')
+    .send({
+      author: "Author",
+      url: "https://url.com"
+    })
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send({
+      title: "Title",
+      url: "https://url.com"
+    })
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send({
+      url: "https://url.com"
+    })
+    .expect(400)
 })
 
 after(async () => {
