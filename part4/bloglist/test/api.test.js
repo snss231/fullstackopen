@@ -92,7 +92,7 @@ test('unique identifier is id', async () => {
   assert.doesNotThrow(() => res.body[0].id)
 })
 
-test.only('post blogs correctly creates blog', async () => {
+test('post blogs correctly creates blog', async () => {
   const initialCount = await Blog.countDocuments()
 
   const req = {
@@ -117,6 +117,24 @@ test.only('post blogs correctly creates blog', async () => {
     url: created.url,
     likes: created.likes
   }, req)
+})
+
+test.only('likes defaults to 0 if missing from request', async () => {
+  const req = {
+    title: "Likeless blog",
+    author: "Loser",
+    url: "https://nobody-likes-me.com"
+  }
+
+  const res = await api
+    .post('/api/blogs')
+    .send(req)
+    .expect(201)
+
+
+  const created = await Blog.findById(res.body.id)
+
+  assert.equal(created.likes, 0)
 })
 
 after(async () => {
