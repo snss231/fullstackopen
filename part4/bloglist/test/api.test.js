@@ -162,7 +162,7 @@ test('post blogs returns 400 if url or title missing', async () => {
     .expect(400)
 })
 
-test.only('delete blog succeeds for existing blog', async () => {
+test('delete blog succeeds for existing blog', async () => {
   const blog = await Blog.findOne({})
 
   assert.notStrictEqual(await Blog.findById(blog.id), null)
@@ -170,10 +170,29 @@ test.only('delete blog succeeds for existing blog', async () => {
   const res = await api
     .delete(`/api/blogs/${blog.id}`)
     .expect(200)
-  console.log('a')
+
   assert.strictEqual(blog.id, res.body.id)
 
   assert.strictEqual(await Blog.findById(blog.id), null)
+})
+
+test.only('update blog succeeds', async () => {
+  const blog = await Blog.findOne({})
+  
+  const res = await api
+    .put(`/api/blogs/${blog.id}`)
+    .send(
+     {
+        id: blog._id.toString(),
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes + 1
+      }
+    )
+    .expect(200)
+
+  assert.strictEqual((await Blog.findById(blog.id)).likes, blog.likes + 1) 
 })
 
 after(async () => {
