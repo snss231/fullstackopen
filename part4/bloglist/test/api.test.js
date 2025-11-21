@@ -66,7 +66,7 @@ before(async () => {
   
   const uri = mongoServer.getUri();
 
-  process.env.MONGODB_URI = uri
+  process.env.TEST_MONGODB_URI = uri
   const app = require('../app')
   api = supertest(app)
 })
