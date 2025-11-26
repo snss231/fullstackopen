@@ -5,8 +5,11 @@ const supertest = require('supertest')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 const Blog = require('../models/blog')
+const User = require('../models/blog')
+const { log } = require('node:console')
 
 let api
+let token
 
 const readyMadeList = [
   {
@@ -70,6 +73,25 @@ before(async () => {
   process.env.TEST_MONGODB_URI = uri
   const app = await require('../app')
   api = supertest(app)
+
+  const user = await api.post('/api/users')
+    .send({
+      username: "testuser",
+      name: "Test User",
+      password: "password"
+    })
+
+  const loginResponse = await api.post('/api/login')
+    .send({
+      username: "testuser",
+      password: "password"
+    })
+ 
+  
+  token = loginResponse.body.token
+
+  console.log(token);
+  
 })
 
 after(async () => {
@@ -80,7 +102,7 @@ after(async () => {
   await mongoServer.stop()
 })
 
-test.only('user cannot be created if username is less than 3 characters long', async () => {
+test('user cannot be created if username is less than 3 characters long', async () => {
     var response = await api.post("/api/users")
     .send({
       username: "ab",
@@ -93,10 +115,12 @@ test.only('user cannot be created if username is less than 3 characters long', a
 })
 
 describe("when there are existing blogs", () => {
+  
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(readyMadeList)
   })
+
 
   test('get blogs returns correct amount of blog posts', async () => {
     const res = await api
@@ -113,7 +137,7 @@ describe("when there are existing blogs", () => {
     assert.doesNotThrow(() => res.body[0].id)
   })
 
-  test('post blogs correctly creates blog', async () => {
+  test.only('post blogs correctly creates blog', async () => {
     const initialCount = await Blog.countDocuments()
 
     const req = {
@@ -125,6 +149,7 @@ describe("when there are existing blogs", () => {
 
     const res = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(req)
       .expect(201)
 
