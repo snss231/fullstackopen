@@ -4,6 +4,7 @@ const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const { getMongoUri, initializeMongoose } = require('./utils/config')
 const validationErrorHandler = require('./middleware/validationErrorHandler')
+const loginRouter = require('./controllers/login')
 
 async function startApp() {
     const app = express()
@@ -15,6 +16,8 @@ async function startApp() {
     app.use('/api/blogs', blogsRouter)
 
     app.use('/api/users', usersRouter)
+
+    app.use('/api/login', loginRouter)
 
     app.use(validationErrorHandler)
 
