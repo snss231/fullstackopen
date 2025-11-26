@@ -5,6 +5,7 @@ const usersRouter = require('./controllers/users')
 const { getMongoUri, initializeMongoose } = require('./utils/config')
 const validationErrorHandler = require('./middleware/validationErrorHandler')
 const loginRouter = require('./controllers/login')
+const tokenExtractor = require('./middleware/tokenExtractor')
 
 async function startApp() {
     const app = express()
@@ -12,6 +13,8 @@ async function startApp() {
     await initializeMongoose()
 
     app.use(express.json())
+
+    app.use(tokenExtractor)
 
     app.use('/api/blogs', blogsRouter)
 
