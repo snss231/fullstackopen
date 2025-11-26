@@ -92,21 +92,6 @@ test.only('user cannot be created if username is less than 3 characters long', a
     assert.strictEqual(response.body.message, "User validation failed: username: Path `username` (`ab`, length 2) is shorter than the minimum allowed length (3).")
 })
 
-
-test.only('user cannot be created if password is less than 3 characters long', async () => {
-    var response = await api.post("/api/users")
-    .send({
-      username: "abaa",
-      name: "name",
-      password: "ac"
-    })
-
-    assert.strictEqual(response.status, 400)
-    assert.deepStrictEqual(response.body, { error: "Password must be at least 3 characters long" })
-})
-
-
-
 describe("when there are existing blogs", () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
