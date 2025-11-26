@@ -5,16 +5,22 @@ const usersRouter = require('./controllers/users')
 const { getMongoUri, initializeMongoose } = require('./utils/config')
 const validationErrorHandler = require('./middleware/validationErrorHandler')
 
-const app = express()
+async function startApp() {
+    const app = express()
 
-initializeMongoose()
+    await initializeMongoose()
 
-app.use(express.json())
+    app.use(express.json())
 
-app.use('/api/blogs', blogsRouter)
+    app.use('/api/blogs', blogsRouter)
 
-app.use('/api/users', usersRouter)
+    app.use('/api/users', usersRouter)
 
-app.use(validationErrorHandler)
+    app.use(validationErrorHandler)
 
-module.exports = app;
+    return app;
+}
+
+const app = startApp()
+
+module.exports = app

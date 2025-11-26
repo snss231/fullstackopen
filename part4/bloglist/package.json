@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_DEV=test node --test",
+    "test": "NODE_ENV=test node --test",
     "dev": "NODE_ENV=development node --watch --inspect index.js"
   },
   "dependencies": {

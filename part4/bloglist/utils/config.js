@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const {MongoMemoryServer} = require('mongodb-memory-server')
 
 async function initializeMongoose() {
-  if (!process.env.MONGODB_URI) {
+  if (process.env.NODE_ENV != 'test' && !process.env.MONGODB_URI) {
     console.warn("No MONGODB_URI configured, starting in-memory server...");
     mongoServer = await MongoMemoryServer.create();
     console.log("Mongo memory server initialized: " + mongoServer.getUri())
