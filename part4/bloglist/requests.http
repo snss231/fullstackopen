@@ -3,6 +3,7 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIxIiwiaWQiOiI2OTI2YzM0MzA2ZGMyMjI0M2UzZWExM2UiLCJpYXQiOjE3NjQxNDgwNDZ9.sTth0b8FhTo5zeoAqYQNeIOuOiNNYa3EFQf-J10UsLM
 
 {
     "title": "Hannah's Travels",
