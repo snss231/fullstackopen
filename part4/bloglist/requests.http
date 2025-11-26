@@ -3,7 +3,19 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIxIiwiaWQiOiI2OTI2YzQyN2JlZGRlNGUwNTUzYmIzMmEiLCJpYXQiOjE3NjQxNDgyNjR9.dJGkLxU9OW7vzVZcWsJlachphiDoqUlgukcps343yX8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIxIiwiaWQiOiI2OTI2YzhiM2E2NDY5OWVlN2FkN2RhMGMiLCJpYXQiOjE3NjQxNDk0MzJ9.CbwgjWIQm8YjemS9wOzYrxGpUwvGkoZVLT8VsP0qL2U
+
+{
+    "title": "Hannah's Travels",
+    "author": "Hannah Kirk",
+    "url": "https://hannahs-travels.com",
+    "likes": 2
+}
+
+###
+DELETE http://localhost:3003/api/blogs/6926c8cea64699ee7ad7da18
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIyIiwiaWQiOiI2OTI2YzhiNWE2NDY5OWVlN2FkN2RhMGUiLCJpYXQiOjE3NjQxNDk0Njl9.8BwOMJK9Prl7I4sr2yAp3QZhWsMVzCzLImTKCakROHo
 
 {
     "title": "Hannah's Travels",
@@ -26,11 +38,30 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "User2",
+    "name": "User 2",
+    "password": "Password"
+}
+
+###
 POST http://localhost:3003/api/login
 Content-Type: application/json
 
 {
     "username": "User1",
+    "password": "Password"
+}
+
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "User2",
     "password": "Password"
 }
 

@@ -1,6 +1,5 @@
 const blogsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
-
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
@@ -11,11 +10,7 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  var token = jwt.verify(request.token, process.env.SECRET) 
-  if (!token.id){
-    return response.status(401)
-  }
-
+  var token = jwt.verify(request.token, process.env.SECRET)
   const user = await User.findById(token.id)
 
   if (!user) {
@@ -32,8 +27,19 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(result)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response) => {  
+  var token = jwt.verify(request.token, process.env.SECRET)
   const { id } = request.params
+  var blog = await Blog.findById(id)
+  if (!blog) {
+    response.status(404).end()
+    return
+  }
+  console.log(blog.creator._id)
+  if (blog.creator._id.toString() !== token.id.toString()) {
+    response.status(403)
+    return
+  }
   var result = await Blog.findByIdAndDelete(id);
 
   if (result) {
