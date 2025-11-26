@@ -6,6 +6,7 @@ const { getMongoUri, initializeMongoose } = require('./utils/config')
 const validationErrorHandler = require('./middleware/validationErrorHandler')
 const loginRouter = require('./controllers/login')
 const tokenExtractor = require('./middleware/tokenExtractor')
+const userExtractor = require('./middleware/tokenExtractor')
 
 async function startApp() {
     const app = express()
