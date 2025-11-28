@@ -62,14 +62,10 @@ const App = () => {
 
   const blogList = () => {
     return (
-      <>
-        <h2>blogs</h2>
-        <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>
-        <div>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />)}
-        </div>
-      </>
+      <div>
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />)}
+      </div>
     )
   }
 
@@ -109,14 +105,14 @@ const App = () => {
     }
   }
 
-
-
   return (
     <div>
       {notification && <div style={{ border: '1px solid black' }}>NOTIFICATION: {notification}</div>}
       {!user && loginForm()}
-      {user && blogList()}
+      {user && <h2>blogs</h2>}
+      {user && <p>{user.name} logged in<button onClick={handleLogout}>logout</button></p>}
       {user && <Togglable buttonLabel='create new blog' ref={blogFormRef}><BlogForm createBlog={createBlog}></BlogForm></Togglable>}
+      {user && blogList()}
     </div>
   )
 }
