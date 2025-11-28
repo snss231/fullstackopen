@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 
 const App = () => {
@@ -10,14 +11,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState()
-  const [newBlog, setNewBlog] = useState({
-    author: '',
-    title: '',
-    url: ''
-  })
+
+  const [notification, _setNotification] = useState()
 
   const blogFormRef = useRef()
-  const [notification, _setNotification] = useState()
 
   const setNotification = (text, timeoutSeconds = 3) => {
     _setNotification(text)
@@ -63,35 +60,6 @@ const App = () => {
     )
   }
 
-  const blogForm = () => {
-    return (
-      <div>
-        <h2>create new</h2>
-        <form onSubmit={handleCreateBlog}>
-          <div>
-            <label>title:<input value={newBlog.title} onChange={({ target }) => setNewBlog({
-              ...newBlog,
-              title: target.value
-            })}></input></label>
-          </div>
-          <div>
-            <label>author:<input value={newBlog.author} onChange={({ target }) => setNewBlog({
-              ...newBlog,
-              author: target.value
-            })}></input></label>
-          </div>
-          <div>
-            <label>url:<input value={newBlog.url} onChange={({ target }) => setNewBlog({
-              ...newBlog,
-              url: target.value
-            })}></input></label>
-          </div>
-          <button>create</button>
-        </form>
-      </div>
-    )
-  }
-
   const blogList = () => {
     return (
       <>
@@ -123,18 +91,6 @@ const App = () => {
     }
   }
 
-  const handleCreateBlog = async e => {
-    e.preventDefault()
-    try {
-      const blog = await blogService.create(newBlog)
-      blogFormRef.current.toggleVisibility()
-      setBlogs([...blogs, blog])
-      setNewBlog({ title: '', author: '', url: '' })
-      setNotification(`a new blog ${blog.title} by ${blog.author} added`)
-    } catch (err) {
-      setNotification(`an error occurred while creating the blog: ${JSON.stringify(err)}`)
-    }
-  }
 
   const handleLogout = async e => {
     e.preventDefault()
@@ -142,13 +98,25 @@ const App = () => {
     window.localStorage.removeItem('user')
   }
 
+  const createBlog = async newBlog => {
+    try {
+      const blog = await blogService.create(newBlog)
+      setBlogs([...blogs, blog])
+      blogFormRef.current.toggleVisibility()
+      setNotification(`a new blog ${blog.title} by ${blog.author} added`)
+    } catch (err) {
+      setNotification(`an error occurred while creating the blog: ${JSON.stringify(err)}`)
+    }
+  }
+
+
 
   return (
     <div>
-      {notification && <div style={{border: '1px solid black'}}>NOTIFICATION: {notification}</div>}
+      {notification && <div style={{ border: '1px solid black' }}>NOTIFICATION: {notification}</div>}
       {!user && loginForm()}
       {user && blogList()}
-      {user && <Togglable buttonLabel='create new blog' ref={blogFormRef}>{blogForm()}</Togglable>}
+      {user && <Togglable buttonLabel='create new blog' ref={blogFormRef}><BlogForm createBlog={createBlog}></BlogForm></Togglable>}
     </div>
   )
 }
