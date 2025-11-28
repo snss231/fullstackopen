@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -14,6 +15,8 @@ const App = () => {
     title: '',
     url: ''
   })
+
+  const blogFormRef = useRef()
   const [notification, _setNotification] = useState()
 
   const setNotification = (text, timeoutSeconds = 3) => {
@@ -124,6 +127,7 @@ const App = () => {
     e.preventDefault()
     try {
       const blog = await blogService.create(newBlog)
+      blogFormRef.current.toggleVisibility()
       setBlogs([...blogs, blog])
       setNewBlog({ title: '', author: '', url: '' })
       setNotification(`a new blog ${blog.title} by ${blog.author} added`)
@@ -144,7 +148,7 @@ const App = () => {
       {notification && <div style={{border: '1px solid black'}}>NOTIFICATION: {notification}</div>}
       {!user && loginForm()}
       {user && blogList()}
-      {user && blogForm()}
+      {user && <Togglable buttonLabel='create new blog' ref={blogFormRef}>{blogForm()}</Togglable>}
     </div>
   )
 }
