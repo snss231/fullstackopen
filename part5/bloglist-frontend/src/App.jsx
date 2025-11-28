@@ -14,6 +14,12 @@ const App = () => {
     title: '',
     url: ''
   })
+  const [notification, _setNotification] = useState()
+
+  const setNotification = (text, timeoutSeconds = 3) => {
+    _setNotification(text)
+    setTimeout(() => _setNotification(), timeoutSeconds * 1000)
+  }
 
   useEffect(() => {
     const storedUser = window.localStorage.getItem('user')
@@ -22,9 +28,9 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-  }, []) 
+  }, [])
 
-  
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -60,19 +66,19 @@ const App = () => {
         <h2>create new</h2>
         <form onSubmit={handleCreateBlog}>
           <div>
-            <label>title:<input value={newBlog.title}onChange={({target}) => setNewBlog({
+            <label>title:<input value={newBlog.title} onChange={({ target }) => setNewBlog({
               ...newBlog,
               title: target.value
             })}></input></label>
           </div>
           <div>
-            <label>author:<input value={newBlog.author}onChange={({target}) => setNewBlog({
+            <label>author:<input value={newBlog.author} onChange={({ target }) => setNewBlog({
               ...newBlog,
               author: target.value
             })}></input></label>
           </div>
           <div>
-            <label>url:<input value={newBlog.url}onChange={({target}) => setNewBlog({
+            <label>url:<input value={newBlog.url} onChange={({ target }) => setNewBlog({
               ...newBlog,
               url: target.value
             })}></input></label>
@@ -108,7 +114,9 @@ const App = () => {
       setPassword('')
       blogService.setToken(user.token)
     } catch (err) {
-      alert(JSON.stringify(err))
+      console.log('caught')
+      console.log(JSON.stringify(err))
+      setNotification(err.message)
     }
   }
 
@@ -117,12 +125,13 @@ const App = () => {
     try {
       const blog = await blogService.create(newBlog)
       setBlogs([...blogs, blog])
-      setNewBlog({title: '', author: '', url: ''})
+      setNewBlog({ title: '', author: '', url: '' })
+      setNotification(`a new blog ${blog.title} by ${blog.author} added`)
     } catch (err) {
-      alert(JSON.stringify(err))
+      setNotification(`an error occurred while creating the blog: ${JSON.stringify(err)}`)
     }
   }
-  
+
   const handleLogout = async e => {
     e.preventDefault()
     setUser(null)
@@ -132,6 +141,7 @@ const App = () => {
 
   return (
     <div>
+      {notification && <div style={{border: '1px solid black'}}>NOTIFICATION: {notification}</div>}
       {!user && loginForm()}
       {user && blogList()}
       {user && blogForm()}
